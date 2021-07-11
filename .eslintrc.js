@@ -24,5 +24,6 @@ module.exports = {
     indent: ['error', 2],
     'arrow-body-style': 'off',
     'no-unused-vars': 'warn',
+    'arrow-parens': 'off',
   },
 };

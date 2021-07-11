@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   FormItemProps,
   FormItemData,
   SchemeItemPropsFormGenerator,
   ISchemeItemProps,
+  UsualScheme,
 } from './types';
 import {defaultFormItemsByType, FormGeneratorItems} from './formItemsByType';
 import {objectGetValue, isFunction, isUndefined} from '../../utils';
@@ -30,7 +31,7 @@ type useFormGeneratorProps<SchemeProps extends ISchemeItemProps> = {
   initialFormData?: FormGeneratorData;
   // Значение по умолчанию для пустой формы
   defaultFormData?: FormGeneratorData;
-  scheme: Record<string, SchemeProps>;
+  scheme: UsualScheme;
   propsAllFormItems: Record<string, any>;
 };
 
@@ -65,16 +66,16 @@ export const createUseFormGenerator = function<SchemeProps extends ISchemeItemPr
       onChange: handleChangeByKey(key),
     });
 
-    const formGeneratorItems = (() => {
-      if (!scheme && !Object.entries(scheme).length) {
+    const formGeneratorItems = useMemo(() => {
+      if (!scheme.length) {
         return {};
       }
 
-      return Object.fromEntries(Object.entries(scheme).map(
-        ([formItemKey, schemeProps]) => {
+      return Object.fromEntries(scheme.map(
+        (schemeProps) => {
           const formDataItemController = createFormDataItemController(formItemKey);
           return [
-            formItemKey,
+            scheme.formItemName,
             <RenderItemsWrapper
               key={formItemKey}
               renderProps={propsAllFormItems}
@@ -85,7 +86,7 @@ export const createUseFormGenerator = function<SchemeProps extends ISchemeItemPr
           ];
         },
       ));
-    })();
+    }, [scheme]);
 
     return {formItems: formGeneratorItems};
   };

@@ -1,8 +1,7 @@
-import { SetState } from 'types';
-import { SchemeItemSelect } from './components/Select';
-import { SchemeItemMultiSelect } from './components/MultiSelect';
-import { SchemeItemRange } from './components/Range';
-
+import {SetState} from 'types';
+import {SchemeItemSelect} from './components/Select';
+import {SchemeItemMultiSelect} from './components/MultiSelect';
+import {SchemeItemRange} from './components/Range';
 
 export type FormItemData = any;
 
@@ -41,3 +40,11 @@ export type ComponentItemProps<S = SchemeItemPropsFormGenerator | any> = {
   schemeProps: S;
   renderProps: Record<string, any>;
 }
+
+type UsualSchemeItem = {
+  type: string;
+  keys: string[]
+  formItemName: string;
+}
+
+export type UsualScheme = UsualSchemeItem[];
