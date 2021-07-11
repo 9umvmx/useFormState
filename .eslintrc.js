@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     'plugin:react/recommended',
@@ -21,5 +22,7 @@ module.exports = {
   ],
   rules: {
     indent: ['error', 2],
+    'arrow-body-style': 'off',
+    'no-unused-vars': 'warn',
   },
 };
