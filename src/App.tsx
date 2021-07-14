@@ -1,14 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.scss';
 import {createFormGenerator, useFormState} from './pkgs';
 
 enum FormGenType {
   SELECT = 'select',
-  INPUT = 'input'
+  INPUT = 'input',
+  BUTTON = 'button'
 }
 
-const useFormGenerator = createFormGenerator({
-  [FormGenType.SELECT]: ({
+const Button = ({
+  schemeProps: {formItemName},
+  formGeneratorProps: {
+    onChange,
+    data,
+  },
+}) => {
+  const [state, setState] = useState(0);
+
+  return (
+    <label>
+    count {state}
+      <button onClick={() => setState((prev) => ++prev)}>{formItemName}</button>
+    </label>
+  );
+};
+
+const formItems = {
+  [FormGenType.INPUT]: ({
     schemeProps: {formItemName},
     formGeneratorProps: {
       onChange,
@@ -19,23 +37,30 @@ const useFormGenerator = createFormGenerator({
       <input onChange={({target}) => onChange(target.value)} value={data}/>
     </label>
   ),
-  [FormGenType.INPUT]: () => <div>input</div>,
+  [FormGenType.BUTTON]: Button,
 
-});
+};
+
+const useFormGenerator = createFormGenerator(formItems);
 
 const scheme = [
   {
-    type: FormGenType.SELECT,
+    type: FormGenType.INPUT,
     keys: ['response', 'data', 'name'],
     formItemName: 'name',
   },
   {
-    type: FormGenType.SELECT,
+    type: FormGenType.INPUT,
     keys: ['response', 'data', 'age'],
     formItemName: 'age',
   },
   {
-    type: FormGenType.SELECT,
+    type: FormGenType.BUTTON,
+    keys: ['response', 'select', 'car'],
+    formItemName: 'car',
+  },
+  {
+    type: FormGenType.INPUT,
     keys: ['data'],
     formItemName: 'data',
   },
@@ -56,7 +81,8 @@ function App() {
       {formItems.age()}
       {formItems.name()}
       {formItems.data()}
-      <div>state: {JSON.stringify(state, null, '\t')}</div>
+      {formItems.car()}
+      <div>state: {JSON.stringify(state, null, '  ')}</div>
       <textarea value={JSON.stringify(state, null, 2)} />
     </div>
   );
