@@ -8,7 +8,18 @@ enum FormGenType {
 }
 
 const useFormGenerator = createFormGenerator({
-  [FormGenType.SELECT]: () => <div>hi</div>,
+  [FormGenType.SELECT]: ({
+    schemeProps: {formItemName},
+    formGeneratorProps: {
+      onChange,
+      data,
+    },
+  }) => (
+    <label>{formItemName}
+      <input onChange={({target}) => onChange(target.value)} value={data}/>
+    </label>
+  ),
+  [FormGenType.INPUT]: () => <div>input</div>,
 
 });
 
@@ -23,6 +34,11 @@ const scheme = [
     keys: ['response', 'data', 'age'],
     formItemName: 'age',
   },
+  {
+    type: FormGenType.SELECT,
+    keys: ['data'],
+    formItemName: 'data',
+  },
 ];
 
 function App() {
@@ -33,9 +49,15 @@ function App() {
     scheme,
   });
 
+  console.log({state});
+
   return (
     <div className="App">
-    text
+      {formItems.age()}
+      {formItems.name()}
+      {formItems.data()}
+      <div>state: {JSON.stringify(state, null, '\t')}</div>
+      <textarea value={JSON.stringify(state, null, 2)} />
     </div>
   );
 }

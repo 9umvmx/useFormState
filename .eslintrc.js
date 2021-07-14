@@ -27,5 +27,6 @@ module.exports = {
     'arrow-parens': 'off',
     'no-return-assign': 'off',
     'react/display-name': 'off',
+    'react/prop-types': 'off',
   },
 };

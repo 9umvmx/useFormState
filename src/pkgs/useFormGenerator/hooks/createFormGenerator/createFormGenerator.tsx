@@ -43,7 +43,7 @@ export const createFormGenerator = function<SchemeProps extends ISchemeItemProps
         (schemeItemProps: UsualSchemeItem) => {
           return [
             schemeItemProps.formItemName,
-            (renderProps: AnyRecord) => (
+            (renderProps?: AnyRecord) => (
               <RenderItemsWrapper
                 key={schemeItemProps.formItemName}
                 propsAllFormItems={propsAllFormItems}
@@ -54,7 +54,7 @@ export const createFormGenerator = function<SchemeProps extends ISchemeItemProps
                 }}
                 schemeProps={schemeItemProps}
                 renderProps={renderProps}
-                formItemsByType={formItemsByType[schemeItemProps.type] as any}
+                formItemsByType={formItemsByType}
               />
             ),
           ];
@@ -78,7 +78,7 @@ type RenderItemsWrapperProps<SchemeProps extends ISchemeItemProps> = {
   formItemsByType: FormGeneratorItems;
   formGeneratorProps: FormGenItemProps;
   schemeProps: SchemeProps;
-  renderProps: RenderProps;
+  renderProps?: any;
   propsAllFormItems?: AnyRecord;
 }
 
@@ -90,7 +90,8 @@ const RenderItemsWrapper = <SchemeProps extends UsualSchemeItem>({
   schemeProps,
   renderProps,
   propsAllFormItems,
-}: RenderItemsWrapperProps<any>) => (
+}: RenderItemsWrapperProps<any>) => {
+  return (
     <>
       {
         formItemsByType[schemeProps.type]({
@@ -102,3 +103,4 @@ const RenderItemsWrapper = <SchemeProps extends UsualSchemeItem>({
       }
     </>
   );
+};

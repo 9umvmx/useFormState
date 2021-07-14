@@ -1,4 +1,4 @@
-import {isFunction} from 'utils/check';
+import {isFunction} from '../../utils';
 
 import {createSetStateByKeys} from './utils';
 
