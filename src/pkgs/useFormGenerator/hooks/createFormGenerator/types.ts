@@ -1,7 +1,5 @@
-import {SetState} from 'types';
-import {SchemeItemSelect} from './components/Select';
-import {SchemeItemMultiSelect} from './components/MultiSelect';
-import {SchemeItemRange} from './components/Range';
+import {SetState} from '../../types';
+import {AnyRecord} from '../../types';
 
 export type FormItemData = any;
 
@@ -19,15 +17,12 @@ export interface ISchemeItemProps {
 }
 
 export type SchemeItemPropsFormGenerator = GenericSchemeItem<(
-  | SchemeItemSelect
-  | SchemeItemMultiSelect
-  | SchemeItemRange
+  any
 )>;
 
-export type FormItemProps = {
+export type FormGenItemProps = {
   onChange: SetState<FormItemData>,
   data: FormItemData,
-  defaultData: FormItemData,
   initialData: FormItemData
 }
 
@@ -36,12 +31,13 @@ export type FormItemProps = {
    typeScript в пропсе каждого частного компонента тип которого известен точно
  */
 export type ComponentItemProps<S = SchemeItemPropsFormGenerator | any> = {
-  formGeneratorProps: FormItemProps;
+  formGeneratorProps: FormGenItemProps;
   schemeProps: S;
-  renderProps: Record<string, any>;
+  renderProps: AnyRecord;
+  propsAllFormItems?: AnyRecord;
 }
 
-type UsualSchemeItem = {
+export type UsualSchemeItem = {
   type: string;
   keys: string[]
   formItemName: string;

@@ -8,22 +8,22 @@ import {
   objectGetValue,
 } from '../../utils';
 
-import {useRecordState} from '.';
+import {useFormState} from '.';
 
 export const createSetStateByKeys = (currentSetState: SetState<any>) => (keys: string[]) => {
-  const newSetState = newValue => {
-    currentSetState(preState => {
+  const newSetState = (newValue: any) => {
+    currentSetState((preState: any) => {
       if (isUndefined(preState) || isNull(preState)) {
         preState = {};
       }
 
       if (!isObject(preState)) {
         throw new Error(
-          `${useRecordState.name}/setStateByKeys не предыдущее состояние !object (N23420&9df2334)`,
+          `${useFormState.name}/setStateByKeys не предыдущее состояние !object (N23420&9df2334)`,
         );
       }
 
-      const getNewValue = thatValue => objectChangeValueByKeys(preState, keys, thatValue);
+      const getNewValue = (thatValue: any) => objectChangeValueByKeys(preState, keys, thatValue);
 
       return (() => {
         if (isFunction(newValue)) {

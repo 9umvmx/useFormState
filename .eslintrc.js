@@ -25,5 +25,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'no-unused-vars': 'warn',
     'arrow-parens': 'off',
+    'no-return-assign': 'off',
+    'react/display-name': 'off',
   },
 };

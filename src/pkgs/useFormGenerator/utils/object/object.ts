@@ -1,57 +1,58 @@
-import _ from 'lodash';
 
-import { FilterObjectExcludeByValue, RecordAny, RecordKey, RecordUnknown } from 'types';
-import { isObject, isUndefined } from 'utils/check';
+import {AnyRecord, RecordKey} from '../../types';
+import {isObject, isUndefined} from '../check';
+import {isNull} from '..';
 
 type Key = string | number;
 
 export const createRecord = (keys: Array<string>, createValue: () => any) => {
-  return keys?.reduce((acc, key) => ({ ...acc, [key]: createValue() }), {});
+  return keys?.reduce((acc, key) => ({...acc, [key]: createValue()}), {});
 };
 
-export const objectGetValue = (obj: object, keys: Array<string | undefined>) => {
-  if (!isObject(obj)) return;
+export const objectGetValue = (obj: AnyRecord | undefined, keys: Array<string | undefined>) => {
+  if (!isObject(obj)) {
+    return;
+  }
 
-  const isValidKey = !keys.some((key) => isUndefined(key) && _.isNull(key));
+  const isValidKey = !keys.some((key) => isUndefined(key) && isNull(key));
 
-  if (!isValidKey) return;
+  if (!isValidKey) {
+    return;
+  }
 
   return keys.reduce((acc: any, key: any, index) => {
     const lastIndex = keys.length - 1;
-    if (index === lastIndex) return acc[key];
+    if (index === lastIndex) {
+      return acc[key];
+    }
 
-    return (acc[key] = { ...acc[key] });
+    return (acc[key] = {...acc[key]});
   }, obj);
 };
 
 export const objectKeys = (obj) => {
-  if (obj) return Object.keys(obj);
-};
-
-type ReturnValueDeleteEmptyKey<V extends object> = FilterObjectExcludeByValue<V, undefined>;
-export const deleteEmptyKey = <O extends object>(obj: O): ReturnValueDeleteEmptyKey<O> => {
-  if (!isObject(obj)) return undefined as any;
-
-  return objectFilter(obj, ([_key, value]) => value !== undefined) as ReturnValueDeleteEmptyKey<O>;
+  if (obj) {
+    return Object.keys(obj);
+  }
 };
 
 export const objectNestedEntries = (obj: object) => {
   const returnValue: Array<[nestedKeys: string[], value: any]> = [];
 
   type TmpValue = [extractedNestedKeys: string[], value: Record<string, any>];
-  for (const tmpValues: TmpValue[] = [[[], obj]]; tmpValues.length; ) {
+  for (const tmpValues: TmpValue[] = [[[], obj]]; tmpValues.length;) {
     const [tmpItemKeys, tmpItemValue] = tmpValues.pop() as TmpValue;
 
     tmpValues.push(
       ...Object.entries(tmpItemValue).reduce((acc: TmpValue[], [key, value]): TmpValue[] => {
         if (isObject(value)) {
           return [...acc, [[...tmpItemKeys, key], value]];
-        } else {
-          returnValue.push([[...tmpItemKeys, key], value]);
         }
 
+        returnValue.push([[...tmpItemKeys, key], value]);
+
         return acc;
-      }, [])
+      }, []),
     );
   }
 
@@ -59,12 +60,16 @@ export const objectNestedEntries = (obj: object) => {
 };
 
 export const objectGetNestedKeys = (obj: object) => {
-  if (!isObject(obj)) return;
+  if (!isObject(obj)) {
+    return;
+  }
 
   return Object.entries(obj).reduce((acc: string[], [key, value]) => {
     const nestedKeys = objectGetNestedKeys(value);
 
-    if (!nestedKeys) return [...acc, [key]];
+    if (!nestedKeys) {
+      return [...acc, [key]];
+    }
 
     return [...acc, ...nestedKeys.map((itemKeys) => [key, ...itemKeys])];
   }, []);
@@ -72,18 +77,18 @@ export const objectGetNestedKeys = (obj: object) => {
 
 export const objectJoinNestedKeys = <O extends object>(
   obj: O,
-  joinKeys: (keys: string[]) => string = (keys) => keys.join('.')
+  joinKeys: (keys: string[]) => string = (keys) => keys.join('.'),
 ): Record<string, any> => {
   return Object.fromEntries(
     objectNestedEntries(obj).map(([nestedKeys, value]) => {
       return [joinKeys(nestedKeys), value];
-    })
+    }),
   );
 };
 
 export const objectToQueryString = (
   sourceObj: object,
-  callback: ([string, any]) => string = ([key, value]) => `${key}=${encodeURIComponent(value)}`
+  callback: ([string, any]) => string = ([key, value]) => `${key}=${encodeURIComponent(value)}`,
 ) => {
   return Object.entries(objectJoinNestedKeys(sourceObj))
     .reduce((acc: string[], entry) => [...acc, callback(entry)], [])
@@ -104,7 +109,7 @@ export const objectFromNestedEntries = (nestedEntry: NestedEntry[]) => {
         return;
       }
 
-      refObj[key] = { ...refObj[key] };
+      refObj[key] = {...refObj[key]};
       refObj = refObj[key];
     });
   }
@@ -116,17 +121,20 @@ type ObjectGroup = {
   [key: string]: (item: [key: (string | number) | any, value: any]) => boolean | undefined;
 };
 export const objectGrouping = (obj: Record<Key, any>, grouping: ObjectGroup) => {
-  if (!isObject(obj) && !isObject(grouping)) return;
+  if (!isObject(obj) && !isObject(grouping)) {
+    return;
+  }
 
   const initialAcc = createRecord(
     Object.keys(grouping).map((key) => key),
-    () => ({})
+    () => ({}),
   );
 
   return Object.entries(obj).reduce((acc, entryItem) => {
     Object.entries(grouping).forEach(([groupKey, groupPredicate]) => {
-      if (groupPredicate(entryItem))
-        acc[groupKey] = { ...acc[groupKey], ...Object.fromEntries([entryItem]) };
+      if (groupPredicate(entryItem)) {
+        acc[groupKey] = {...acc[groupKey], ...Object.fromEntries([entryItem])};
+      }
     });
 
     return acc;
@@ -145,19 +153,21 @@ type EnhanceDataProps = {
 /**
  * Для обогащение данных
  */
-export const enhanceSourceData = ({ sourceData, enhancedData }: EnhanceDataProps) => {
-  return sourceData.map(({ id }) => enhancedData[id]);
+export const enhanceSourceData = ({sourceData, enhancedData}: EnhanceDataProps) => {
+  return sourceData.map(({id}) => enhancedData[id]);
 };
 
-export const objectFilter = <O extends RecordAny>(
+export const objectFilter = <O extends AnyRecord>(
   obj: O,
-  predicate: (item: [keyof O, O[keyof O]]) => boolean | any
+  predicate: (item: [keyof O, O[keyof O]]) => boolean | any,
 ) => {
   return Object.fromEntries(Object.entries(obj).filter(predicate));
 };
 
-export const objectValues = <R extends RecordAny>(obj?: R): undefined | Array<R[keyof R]> => {
-  if (isUndefined(obj)) return;
+export const objectValues = <R extends AnyRecord>(obj?: R): undefined | Array<R[keyof R]> => {
+  if (isUndefined(obj)) {
+    return;
+  }
 
   return Object.values(obj as NonNullable<typeof obj>);
 };
@@ -167,20 +177,20 @@ export const parseQuery = (query: string) => {
 };
 
 export const objectMap = (
-  object: RecordAny,
-  callbackfn: ([RecordKey, any]) => [RecordKey, any]
+  object: AnyRecord,
+  callbackfn: ([RecordKey, any]) => [RecordKey, any],
 ) => {
   return Object.fromEntries(Object.entries(object).map(callbackfn));
 };
 
-export const objectForEach = (object: RecordAny, callbackfn: ([RecordKey, any]) => void) => {
+export const objectForEach = (object: AnyRecord, callbackfn: ([RecordKey, any]) => void) => {
   Object.entries(object).forEach(callbackfn);
 };
 
-export const objectChangeValueByKeys = (obj: RecordAny, keys: RecordKey[], newValue: any) => {
+export const objectChangeValueByKeys = (obj: AnyRecord, keys: RecordKey[], newValue: any) => {
   // Что бы не мутировать исходный объект
   // Меняет ссылку только для дерево связанного с проброшенном путём ключей
-  const newObj = { ...obj };
+  const newObj = {...obj};
   let refNode = newObj;
 
   keys.forEach((key, index) => {
@@ -189,7 +199,7 @@ export const objectChangeValueByKeys = (obj: RecordAny, keys: RecordKey[], newVa
       return;
     }
 
-    refNode[key] = { ...refNode[key] };
+    refNode[key] = {...refNode[key]};
     refNode = refNode[key];
   });
 

@@ -1,9 +1,8 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/display-name */
 import {ReactElement} from 'react';
 
 import {ComponentItemProps, FormGeneratorSchemeType} from './types';
-import {Select} from '../../components/Select';
-import {MultiSelect} from '../../components/MultiSelect';
-import {Range} from '../../components/Range';
 
 export type FormGeneratorItems = Record<
   string,
@@ -12,7 +11,7 @@ export type FormGeneratorItems = Record<
 >;
 
 export const defaultFormItemsByType: FormGeneratorItems = {
-  [FormGeneratorSchemeType.SELECT]: Select,
-  [FormGeneratorSchemeType.MULTI_SELECT]: MultiSelect,
-  [FormGeneratorSchemeType.RANGE]: Range,
+  [FormGeneratorSchemeType.SELECT]: () => <>tmp</>,
+  [FormGeneratorSchemeType.MULTI_SELECT]: () => <>tmp</>,
+  [FormGeneratorSchemeType.RANGE]: () => <>tmp</>,
 };

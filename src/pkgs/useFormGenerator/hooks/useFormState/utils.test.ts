@@ -1,9 +1,9 @@
-import { isFunction } from 'utils/check';
+import {isFunction} from 'utils/check';
 
-import { createSetStateByKeys } from './utils';
+import {createSetStateByKeys} from './utils';
 
 const createMockSetState = (initialState?: any) => {
-  const refState = { current: initialState };
+  const refState = {current: initialState};
 
   const getState = () => refState.current;
   const setState = (newState) => {
@@ -20,7 +20,7 @@ const createMockSetState = (initialState?: any) => {
 describe('useRecordState', () => {
   describe(createSetStateByKeys.name, () => {
     test('simpleTest', () => {
-      const initialState = { a: 'a', b: { c: true, g: '2' } };
+      const initialState = {a: 'a', b: {c: true, g: '2'}};
       const [getState, setState] = createMockSetState(initialState);
 
       setState.byKeys = createSetStateByKeys(setState);
@@ -29,12 +29,12 @@ describe('useRecordState', () => {
 
       setStateC(false);
 
-      expect(getState()).toStrictEqual({ a: 'a', b: { c: false, g: '2' } });
+      expect(getState()).toStrictEqual({a: 'a', b: {c: false, g: '2'}});
     });
     test('recursion setStateByKeys test', () => {
       const initialState = {
         a: 'a',
-        b: { c: { g: 2, test: 'test' }, test: 'test' },
+        b: {c: {g: 2, test: 'test'}, test: 'test'},
         test: 'test',
       };
       const [getState, setState] = createMockSetState(initialState);
@@ -48,7 +48,7 @@ describe('useRecordState', () => {
 
       expect(getState()).toStrictEqual({
         a: 'a',
-        b: { c: { g: 10, test: 'test' }, test: 'test' },
+        b: {c: {g: 10, test: 'test'}, test: 'test'},
         test: 'test',
       });
     });
