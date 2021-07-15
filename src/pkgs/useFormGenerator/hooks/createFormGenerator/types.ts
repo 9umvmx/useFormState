@@ -33,7 +33,7 @@ export type FormGenItemProps = {
 export type ComponentItemProps<S = SchemeItemPropsFormGenerator | any> = {
   formGeneratorProps: FormGenItemProps;
   schemeProps: S;
-  renderProps: AnyRecord;
+  renderProps: any;
   propsAllFormItems?: AnyRecord;
 }
 
