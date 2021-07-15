@@ -45,12 +45,6 @@ const Input = ({
   return <input onChange={handleChange} className={renderProps.className}/>;
 };
 
-const formItems = {
-  [FormGenType.INPUT]: Input,
-  [FormGenType.BTN_DECREMENT]: BtnDecrement,
-  [FormGenType.BTN_INCREMENT]: BtnIncrement,
-};
-
 const scheme = [
   {
     type: FormGenType.INPUT,
@@ -74,7 +68,13 @@ const scheme = [
   },
 ];
 
-const useFormGenerator = createFormGenerator(formItems);
+const allFormItem = {
+  [FormGenType.INPUT]: Input,
+  [FormGenType.BTN_DECREMENT]: BtnDecrement,
+  [FormGenType.BTN_INCREMENT]: BtnIncrement,
+};
+
+const useFormGenerator = createFormGenerator(allFormItem);
 
 function App() {
   const [state, setState] = useFormState<any>();
@@ -84,14 +84,20 @@ function App() {
     scheme,
   });
 
+  const handleSubmit = (event: React.FormEvent) => event.preventDefault();
+
   return (
     <div className="App">
       <h2>Представление формы</h2>
-      <form>
-        <label>Имя: {formItems.inputName({className: 'input-name'})}</label>
-        <label>Возраст: {formItems.inputAge({className: 'input-age'})}</label>
-        <span>Количество детей: {state?.data?.other?.childrenCount}</span>
-        {formItems.childIncrement()}{formItems.childrenDecrement()}
+      <form onSubmit={handleSubmit}>
+        <label className="name">Имя: {formItems.inputName({className: 'name-input'})}</label>
+        <label className="age">Возраст: {formItems.inputAge({className: 'age-input'})}</label>
+        <div className="count-child">
+          <span className="count-child__title">Количество детей: <span>{state?.data?.other?.childrenCount}</span></span>
+          {formItems.childIncrement({className: 'btn-inc', text: 'Увеличить'})}
+          {formItems.childrenDecrement({className: 'btn-decrement', text: 'Уменьшить'})}
+        </div>
+        <input type="submit"/>
       </form>
       <textarea value={JSON.stringify(state, null, 2)} />
     </div>
