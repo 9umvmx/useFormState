@@ -1,4 +1,11 @@
-import React, {ChangeEvent} from 'react';
+import React, {
+  ChangeEvent,
+  createElement,
+  forwardRef,
+  useDebugValue,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import './App.scss';
 import {createFormGenerator, useFormState} from './pkgs';
 import {isNumber} from './pkgs/useFormGenerator/utils';
@@ -42,7 +49,15 @@ const Input = ({
   renderProps,
 }) => {
   const handleChange = ({target}: ChangeEvent<HTMLInputElement>) => onChange(target.value);
-  return <input onChange={handleChange} className={renderProps.className}/>;
+  return (
+    <input
+      onChange={handleChange}
+      required
+      form="text form"
+      formNoValidate
+      className={renderProps.className}
+    />
+  );
 };
 
 const scheme = [
@@ -84,12 +99,22 @@ function App() {
     scheme,
   });
 
-  const handleSubmit = (event: React.FormEvent) => event.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // Console.log({event});
+    return false;
+  };
+
+  const el = createElement('div');
 
   return (
     <div className="App">
       <h2>Представление формы</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onInvalid={console.log}
+        onSubmit={handleSubmit}
+      >
         <label className="name">Имя: {formItems.inputName({className: 'name-input'})}</label>
         <label className="age">Возраст: {formItems.inputAge({className: 'age-input'})}</label>
         <div className="count-child">
@@ -105,3 +130,4 @@ function App() {
 }
 
 export default App;
+
