@@ -101,12 +101,13 @@ function App() {
   });
 
   useEffect(() => {
-    const setStateC = setState.byKeys(['b', 'c']);
-    setStateC(false);
-    setState((prev) => ({...prev, dddd: 33}));
-    setTimeout(() => {
-      setStateC(false);
-    }, 100);
+    const setStateB = setState.byKeys(['b']);
+    const setStateC = setStateB.byKeys(['c', 'g']);
+    setStateC('success');
+
+  // SetTimeout(() => {
+  //   setStateC(false);
+  // }, 100);
   }, []);
 
   console.log({state});

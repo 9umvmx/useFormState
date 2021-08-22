@@ -14,7 +14,7 @@ import {useFormState} from '.';
  */
 export const createFormSetState // CreateFormSetState
   = <S extends SetState<any> = SetState<any>>
-    (setState: FormSetState<S>) => {
+    (setState: SetState<S> & FormSetState<S>) => {
     setState.byKeys = createSetStateByKeys(setState);
 
     return setState;
@@ -30,7 +30,7 @@ export const createSetStateByKeys // CreateSetStateByKeys
     return (keys: string[]) => {
       const newSetState = createNewSetStateByKeys(setState, keys);
 
-      return newSetState;
+      return createFormSetState(newSetState);
     };
   };
 
