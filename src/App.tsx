@@ -3,6 +3,7 @@ import React, {
   createElement,
   forwardRef,
   useDebugValue,
+  useEffect,
   useImperativeHandle,
   useRef,
 } from 'react';
@@ -98,6 +99,17 @@ function App() {
     setFormData: setState,
     scheme,
   });
+
+  useEffect(() => {
+    const setStateC = setState.byKeys(['b', 'c']);
+    setStateC(false);
+    setState((prev) => ({...prev, dddd: 33}));
+    setTimeout(() => {
+      setStateC(false);
+    }, 100);
+  }, []);
+
+  console.log({state});
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
