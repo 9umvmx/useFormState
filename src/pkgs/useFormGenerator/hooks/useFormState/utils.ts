@@ -18,6 +18,7 @@ export const createFormSetState // CreateFormSetState
   = <S extends SetState<any> = SetState<any>>
     (setState: SetState<S> & FormSetState<S>) => {
     setState.byKeys = createSetStateByKeys(setState);
+    setState.byIndx = createSetStateByIndex(setState);
 
     return setState;
   };
@@ -25,6 +26,7 @@ export const createFormSetState // CreateFormSetState
 type SetStateAny = SetState<any>;
 export type FormSetState<S extends SetStateAny> = S & { // S & { extend
   byKeys: (keys: string[]) => SetStateAny;
+  byIndx: (index: number) => SetStateAny;
 }
 
 // SET_STATE_BY_KEYS

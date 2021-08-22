@@ -1,6 +1,6 @@
 import {isFunction} from '../../utils';
 
-import {createSetStateByKeys} from './utils';
+import {createSetStateByIndex, createSetStateByKeys} from './utils';
 
 const createMockSetState = (initialState?: any) => {
   const refState = {current: initialState};
@@ -51,6 +51,29 @@ describe('useRecordState', () => {
         b: {c: {g: 10, test: 'test'}, test: 'test'},
         test: 'test',
       });
+    });
+  });
+
+  describe(createSetStateByIndex.name, () => {
+    test('simpleTest', () => {
+      const [getState, setState] = createMockSetState(['vasya', 2, 'petya']);
+
+      setState.byIndex = createSetStateByIndex(setState);
+
+      const setStateSecondItem = setState.byIndex(1);
+      setStateSecondItem(10);
+
+      expect(getState()).toStrictEqual(['vasya', 10, 'petya']);
+    });
+    test('prevValue test', () => {
+      const [getState, setState] = createMockSetState(['vasya', 2, 'petya']);
+
+      setState.byIndex = createSetStateByIndex(setState);
+
+      const setStateSecondItem = setState.byIndex(1);
+      setStateSecondItem((prev) => prev - 3);
+
+      expect(getState()).toStrictEqual(['vasya', -1, 'petya']);
     });
   });
 });

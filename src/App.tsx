@@ -102,15 +102,10 @@ function App() {
 
   useEffect(() => {
     const setStateB = setState.byKeys(['b']);
-    const setStateC = setStateB.byKeys(['c', 'g']);
-    setStateC('success');
+    setStateB(['vas', 3, 'pet']);
 
-  // SetTimeout(() => {
-  //   setStateC(false);
-  // }, 100);
+    setStateB.byIndx(1)(10);
   }, []);
-
-  // Console.log({state});
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
