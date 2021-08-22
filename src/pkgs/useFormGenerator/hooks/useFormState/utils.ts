@@ -26,18 +26,18 @@ type FormSetState<S extends SetStateAny> = S & { // S & { extend
 }
 
 export const createSetStateByKeys // CreateSetStateByKeys
-  = (currentSetState: SetStateAny) => {
+  = (setState: SetStateAny) => {
     return (keys: string[]) => {
-      const newSetState = createNewSetStateByKeys(currentSetState, keys);
+      const newSetState = createNewSetStateByKeys(setState, keys);
 
       return createSetStateByKeys(newSetState);
     };
   };
 
 const createNewSetStateByKeys // CreateNewSetStateByKeys
-  = (currentSetState: SetStateAny, keys: string[]) => {
-    return (newValue: any) => {
-      currentSetState((preState: any) => { // Dispatch SetState
+  = (setState: SetStateAny, keys: string[]) => {
+    return (newValue: any): void =>
+      setState((preState: any) => { // Dispatch SetState
         // CheckValid and mutate
         if (isUndefined(preState) || isNull(preState)) {
           preState = {};
@@ -62,5 +62,4 @@ const createNewSetStateByKeys // CreateNewSetStateByKeys
           return getNewValue(newValue);
         })(); // End function
       });
-    };
   };

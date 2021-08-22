@@ -126,16 +126,30 @@ function App() {
       <form
         onInvalid={console.log}
         onSubmit={handleSubmit}
-      >
-        <label className="name">Имя: {formItems.inputName({className: 'name-input'})}</label>
-        <label className="age">Возраст: {formItems.inputAge({className: 'age-input'})}</label>
-        <div className="count-child">
-          <span className="count-child__title">Количество детей: <span>{state?.data?.other?.childrenCount}</span></span>
-          {formItems.childIncrement({className: 'btn-inc', text: 'Увеличить'})}
-          {formItems.childrenDecrement({className: 'btn-decrement', text: 'Уменьшить'})}
-        </div>
-        <input type="submit"/>
-      </form>
+      >{(
+          <>
+            <label className="name" >
+        Имя: {formItems.inputName({className: 'name-input'})}
+            </label>
+
+            <label className="age">
+        Возраст: {formItems.inputAge({className: 'age-input'})}
+            </label>
+
+            <div className="count-child">
+              <span className="count-child__title">
+        Количество детей: <span>{state?.data?.other?.childrenCount} </span>
+              </span>
+
+              {formItems.childIncrement({className: 'btn-inc', text: 'Увеличить'})}
+              {formItems.childrenDecrement({className: 'btn-decrement', text: 'Уменьшить'})}
+            </div>
+
+            <input type="submit"/>
+          </>
+        )}
+      </form> {/* End form */}
+
       <textarea value={JSON.stringify(state, null, 2)} />
     </div>
   );
