@@ -30,13 +30,16 @@ export const createSetStateByKeys // CreateSetStateByKeys
     return (keys: string[]) => {
       const newSetState = createNewSetStateByKeys(setState, keys);
 
-      return createSetStateByKeys(newSetState);
+      return newSetState;
     };
   };
 
 const createNewSetStateByKeys // CreateNewSetStateByKeys
-  = (setState: SetStateAny, keys: string[]) => {
-    return (newValue: any): void =>
+  = ( // Variables
+    setState: SetStateAny,
+    keys: string[],
+  ) => {
+    return (newValue: any): void => // Create Dispatch SetState
       setState((preState: any) => { // Dispatch SetState
         // CheckValid
         if (isUndefined(preState) || isNull(preState)) {
@@ -58,5 +61,5 @@ const createNewSetStateByKeys // CreateNewSetStateByKeys
 
           return objectChangeValueByKeys(preState, keys, newValue);
         })(); // End function
-      });
+      }); // End Dispatch SetState
   };

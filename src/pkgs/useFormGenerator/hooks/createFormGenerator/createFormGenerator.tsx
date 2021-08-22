@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
 import {
   FormGenItemProps,
-  FormItemData,
   SchemeItemPropsFormGenerator,
   ISchemeItemProps,
   UsualScheme,
@@ -27,20 +26,24 @@ type useFormGeneratorProps<SchemeProps extends ISchemeItemProps> = {
 export const createFormGenerator = function<SchemeProps extends ISchemeItemProps> (
   formItemsByType: FormGeneratorItems,
 ) {
-  return ({
-    formData,
-    setFormData,
-    initialFormData,
-    scheme,
-    propsAllFormItems,
-  }: useFormGeneratorProps<SchemeProps>) => {
-    const formGeneratorItems = createFormItems(scheme);
+  return (props: useFormGeneratorProps<SchemeProps>) => {
+    const formGeneratorItems = createFormItems({...props, formItemsByType});
 
     return {formItems: formGeneratorItems};
   };
 };
 
-const createFormItems = (scheme: UsualScheme, propsAllFormItems) => {
+type createFormItemsProps = useFormGeneratorProps<any> & { // & {
+  formItemsByType: FormGeneratorItems;
+}
+const createFormItems = ({
+  scheme,
+  propsAllFormItems,
+  setFormData,
+  formData,
+  initialFormData,
+  formItemsByType,
+}: createFormItemsProps) => {
   if (!scheme.length) {
     return {};
   }
@@ -68,14 +71,6 @@ const createFormItems = (scheme: UsualScheme, propsAllFormItems) => {
   ));
 };
 
-/**
- * @deprecated defaultFormItemsByType не отлажены
- * На данный момент используются только локальные кастомные item у lots
- */
-export const useFormGenerator = createFormGenerator<
-  SchemeItemPropsFormGenerator
->(defaultFormItemsByType);
-
 type RenderItemsWrapperProps<SchemeProps extends ISchemeItemProps> = {
   formItemsByType: FormGeneratorItems;
   formGeneratorProps: FormGenItemProps;
@@ -84,7 +79,7 @@ type RenderItemsWrapperProps<SchemeProps extends ISchemeItemProps> = {
   propsAllFormItems?: RecordAny;
 }
 
-// Вынес в обёртку что бы можно было создавать хуки в нутри элементов формы
+// Вынес в обёртку что бы можно было создавать хуки внутри элементов формы
 // В противном случае будет ругаться что количество хуков за рендер изминалось
 const RenderItemsWrapper = <SchemeProps extends UsualSchemeItem>({
   formItemsByType,
