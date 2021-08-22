@@ -1,5 +1,5 @@
 
-import {AnyRecord, RecordKey} from '../../types';
+import {RecordAny, RecordKey} from '../../types';
 import {isObject, isUndefined} from '../check';
 import {isNull} from '..';
 
@@ -9,7 +9,7 @@ export const createRecord = (keys: Array<string>, createValue: () => any) => {
   return keys?.reduce((acc, key) => ({...acc, [key]: createValue()}), {});
 };
 
-export const objectGetValueByKeys = (obj: AnyRecord | undefined, keys: Array<string | undefined>) => {
+export const objectGetValueByKeys = (obj: RecordAny | undefined, keys: Array<string | undefined>) => {
   if (!isObject(obj)) {
     return;
   }
@@ -157,14 +157,14 @@ export const enhanceSourceData = ({sourceData, enhancedData}: EnhanceDataProps) 
   return sourceData.map(({id}) => enhancedData[id]);
 };
 
-export const objectFilter = <O extends AnyRecord>(
+export const objectFilter = <O extends RecordAny>(
   obj: O,
   predicate: (item: [keyof O, O[keyof O]]) => boolean | any,
 ) => {
   return Object.fromEntries(Object.entries(obj).filter(predicate));
 };
 
-export const objectValues = <R extends AnyRecord>(obj?: R): undefined | Array<R[keyof R]> => {
+export const objectValues = <R extends RecordAny>(obj?: R): undefined | Array<R[keyof R]> => {
   if (isUndefined(obj)) {
     return;
   }
@@ -177,17 +177,17 @@ export const parseQuery = (query: string) => {
 };
 
 export const objectMap = (
-  object: AnyRecord,
+  object: RecordAny,
   callbackfn: ([RecordKey, any]) => [RecordKey, any],
 ) => {
   return Object.fromEntries(Object.entries(object).map(callbackfn));
 };
 
-export const objectForEach = (object: AnyRecord, callbackfn: ([RecordKey, any]) => void) => {
+export const objectForEach = (object: RecordAny, callbackfn: ([RecordKey, any]) => void) => {
   Object.entries(object).forEach(callbackfn);
 };
 
-export const objectChangeValueByKeys = (obj: AnyRecord, keys: RecordKey[], newValue: any) => {
+export const objectChangeValueByKeys = (obj: RecordAny, keys: RecordKey[], newValue: any) => {
   // Что бы не мутировать исходный объект
   // Меняет ссылку только для дерево связанного с проброшенном путём ключей
   const newObj = {...obj};

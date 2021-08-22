@@ -8,4 +8,6 @@ export type UseState<S> = [S, SetState<S>];
 
 // Types utils
 export type RecordKey = string | number;
-export type AnyRecord = Record<RecordKey, any>
+export type RecordAny = Record<any, any>
+export type RecordStringAny = Record<string, any>;
+export type RecordString = Record<string, string>;

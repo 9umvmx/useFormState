@@ -1,5 +1,5 @@
 import {SetState} from '../../types';
-import {AnyRecord} from '../../types';
+import {RecordAny} from '../../types';
 
 export type FormItemData = any;
 
@@ -34,7 +34,7 @@ export type ComponentItemProps<S = SchemeItemPropsFormGenerator | any> = {
   formGeneratorProps: FormGenItemProps;
   schemeProps: S;
   renderProps: any;
-  propsAllFormItems?: AnyRecord;
+  propsAllFormItems?: RecordAny;
 }
 
 export type UsualSchemeItem = {

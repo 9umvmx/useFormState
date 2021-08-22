@@ -10,16 +10,16 @@ import {
 import {defaultFormItemsByType, FormGeneratorItems} from './formItemsByType';
 import {objectGetValueByKeys, isFunction, isUndefined} from '../../utils';
 import {ExpandSetState} from '../useFormState/types';
-import {AnyRecord} from '../../types';
+import {RecordAny} from '../../types';
 
-export type FormGeneratorData = undefined | AnyRecord;
+export type FormGeneratorData = undefined | RecordAny;
 
-type RenderProps = Record<string, any>;
+type RecordStringAny = Record<string, any>;
 
 type useFormGeneratorProps<SchemeProps extends ISchemeItemProps> = {
   formData?: FormGeneratorData;
   scheme: UsualScheme;
-  propsAllFormItems?: Record<string, any>;
+  propsAllFormItems?: RecordStringAny;
   setFormData: ExpandSetState<FormGeneratorData>;
   initialFormData?: FormGeneratorData;
 };
@@ -34,36 +34,38 @@ export const createFormGenerator = function<SchemeProps extends ISchemeItemProps
     scheme,
     propsAllFormItems,
   }: useFormGeneratorProps<SchemeProps>) => {
-    const formGeneratorItems = (() => {
-      if (!scheme.length) {
-        return {};
-      }
-
-      return Object.fromEntries(scheme.map(
-        (schemeItemProps: UsualSchemeItem) => {
-          return [
-            schemeItemProps.formItemName,
-            (renderProps?: AnyRecord) => (
-              <RenderItemsWrapper
-                key={schemeItemProps.formItemName}
-                propsAllFormItems={propsAllFormItems}
-                formGeneratorProps={{
-                  onChange: setFormData.byKeys(schemeItemProps.keys),
-                  data: objectGetValueByKeys(formData, schemeItemProps.keys),
-                  initialData: objectGetValueByKeys(initialFormData, schemeItemProps.keys),
-                }}
-                schemeProps={schemeItemProps}
-                renderProps={renderProps}
-                formItemsByType={formItemsByType}
-              />
-            ),
-          ];
-        },
-      ));
-    })();
+    const formGeneratorItems = createFormItems(scheme);
 
     return {formItems: formGeneratorItems};
   };
+};
+
+const createFormItems = (scheme: UsualScheme, propsAllFormItems) => {
+  if (!scheme.length) {
+    return {};
+  }
+
+  return Object.fromEntries(scheme.map(
+    (schemeItemProps: UsualSchemeItem) => {
+      return [
+        schemeItemProps.formItemName,
+        (renderProps?: RecordAny) => (
+          <RenderItemsWrapper
+            key={schemeItemProps.formItemName}
+            propsAllFormItems={propsAllFormItems}
+            formGeneratorProps={{
+              onChange: setFormData.byKeys(schemeItemProps.keys),
+              data: objectGetValueByKeys(formData, schemeItemProps.keys),
+              initialData: objectGetValueByKeys(initialFormData, schemeItemProps.keys),
+            }}
+            schemeProps={schemeItemProps}
+            renderProps={renderProps}
+            formItemsByType={formItemsByType}
+          />
+        ),
+      ];
+    },
+  ));
 };
 
 /**
@@ -79,7 +81,7 @@ type RenderItemsWrapperProps<SchemeProps extends ISchemeItemProps> = {
   formGeneratorProps: FormGenItemProps;
   schemeProps: SchemeProps;
   renderProps?: any;
-  propsAllFormItems?: AnyRecord;
+  propsAllFormItems?: RecordAny;
 }
 
 // Вынес в обёртку что бы можно было создавать хуки в нутри элементов формы

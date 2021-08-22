@@ -38,9 +38,9 @@ const createNewSetStateByKeys // CreateNewSetStateByKeys
   = (setState: SetStateAny, keys: string[]) => {
     return (newValue: any): void =>
       setState((preState: any) => { // Dispatch SetState
-        // CheckValid and mutate
+        // CheckValid
         if (isUndefined(preState) || isNull(preState)) {
-          preState = {};
+          preState = {}; // Mutate
         }
 
         if (!isObject(preState)) {
@@ -49,17 +49,14 @@ const createNewSetStateByKeys // CreateNewSetStateByKeys
           );
         }
 
-        const getNewValue = (newStateByKeys: SetStateAny) => {
-          return objectChangeValueByKeys(preState, keys, newStateByKeys);
-        };
-
+        // Main content
         return (() => { // Start function
           if (isFunction(newValue)) {
             const prevStateByKeys = objectGetValueByKeys(preState, keys);
-            return getNewValue(newValue(prevStateByKeys));
+            return objectChangeValueByKeys(preState, keys, newValue(prevStateByKeys));
           }
 
-          return getNewValue(newValue);
+          return objectChangeValueByKeys(preState, keys, newValue);
         })(); // End function
       });
   };
