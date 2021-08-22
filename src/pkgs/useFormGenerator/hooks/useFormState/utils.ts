@@ -5,7 +5,7 @@ import {
   isObject,
   isUndefined,
   objectChangeValueByKeys,
-  objectGetValue,
+  objectGetValueByKeys,
 } from '../../utils';
 
 import {useFormState} from '.';
@@ -23,11 +23,11 @@ export const createSetStateByKeys = (currentSetState: SetState<any>) => (keys: s
         );
       }
 
-      const getNewValue = (thatValue: any) => objectChangeValueByKeys(preState, keys, thatValue);
+      const getNewValue = (newStateByKeys: any) => objectChangeValueByKeys(preState, keys, newStateByKeys);
 
       return (() => {
         if (isFunction(newValue)) {
-          const prevStateByKeys = objectGetValue(preState as any, keys);
+          const prevStateByKeys = objectGetValueByKeys(preState, keys);
           return getNewValue(newValue(prevStateByKeys));
         }
 
@@ -36,8 +36,19 @@ export const createSetStateByKeys = (currentSetState: SetState<any>) => (keys: s
     });
   };
 
-  newSetState.byKeys = createSetStateByKeys(newSetState);
-
-  return newSetState;
+  return createSetStateByKeys(newSetState);
 };
 
+type FormSetState<S extends SetState<any>> = S & {
+  byKeys: (keys: string[]) => SetState<any>;
+}
+
+/**
+ * Мутирует значение
+ */
+export const createFormSetState = <S extends SetState<any> = SetState<any>>
+  (setState: FormSetState<S>) => {
+  setState.byKeys = createSetStateByKeys(setState);
+
+  return setState;
+};

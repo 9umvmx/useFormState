@@ -9,7 +9,7 @@ export const createRecord = (keys: Array<string>, createValue: () => any) => {
   return keys?.reduce((acc, key) => ({...acc, [key]: createValue()}), {});
 };
 
-export const objectGetValue = (obj: AnyRecord | undefined, keys: Array<string | undefined>) => {
+export const objectGetValueByKeys = (obj: AnyRecord | undefined, keys: Array<string | undefined>) => {
   if (!isObject(obj)) {
     return;
   }

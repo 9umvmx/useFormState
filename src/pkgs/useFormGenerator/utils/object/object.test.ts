@@ -6,7 +6,7 @@ import {
   objectFilter,
   objectFromNestedEntries,
   objectGetNestedKeys,
-  objectGetValue,
+  objectGetValueByKeys,
   objectGrouping,
   objectJoinNestedKeys,
   objectMap,
@@ -20,18 +20,18 @@ describe('utils object', () => {
     expect(createRecord(['aaa', 'bbb'], () => true)).toStrictEqual({aaa: true, bbb: true});
   });
 
-  describe(objectGetValue.name, () => {
+  describe(objectGetValueByKeys.name, () => {
     test('simple test', () => {
-      expect(objectGetValue({keyA: 'aaa'}, ['keyA'])).toBe('aaa');
+      expect(objectGetValueByKeys({keyA: 'aaa'}, ['keyA'])).toBe('aaa');
     });
 
     test('nested test', () => {
-      expect(objectGetValue({keyA: {keyB: 'bbb'}}, ['keyA', 'keyB'])).toBe('bbb');
+      expect(objectGetValueByKeys({keyA: {keyB: 'bbb'}}, ['keyA', 'keyB'])).toBe('bbb');
     });
 
     test('invalid key test', () => {
-      expect(objectGetValue({keyA: undefined}, ['keyA', 'keyB'])).toBeUndefined();
-      expect(objectGetValue({keyA: null}, ['keyA', 'keyB'])).toBeUndefined();
+      expect(objectGetValueByKeys({keyA: undefined}, ['keyA', 'keyB'])).toBeUndefined();
+      expect(objectGetValueByKeys({keyA: null}, ['keyA', 'keyB'])).toBeUndefined();
     });
   });
 

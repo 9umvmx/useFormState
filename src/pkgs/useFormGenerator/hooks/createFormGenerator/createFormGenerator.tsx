@@ -8,7 +8,7 @@ import {
   UsualSchemeItem,
 } from './types';
 import {defaultFormItemsByType, FormGeneratorItems} from './formItemsByType';
-import {objectGetValue, isFunction, isUndefined} from '../../utils';
+import {objectGetValueByKeys, isFunction, isUndefined} from '../../utils';
 import {ExpandSetState} from '../useFormState/types';
 import {AnyRecord} from '../../types';
 
@@ -49,8 +49,8 @@ export const createFormGenerator = function<SchemeProps extends ISchemeItemProps
                 propsAllFormItems={propsAllFormItems}
                 formGeneratorProps={{
                   onChange: setFormData.byKeys(schemeItemProps.keys),
-                  data: objectGetValue(formData, schemeItemProps.keys),
-                  initialData: objectGetValue(initialFormData, schemeItemProps.keys),
+                  data: objectGetValueByKeys(formData, schemeItemProps.keys),
+                  initialData: objectGetValueByKeys(initialFormData, schemeItemProps.keys),
                 }}
                 schemeProps={schemeItemProps}
                 renderProps={renderProps}
