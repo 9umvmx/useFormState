@@ -1,11 +1,6 @@
 import React, {
   ChangeEvent,
-  createElement,
-  forwardRef,
-  useDebugValue,
   useEffect,
-  useImperativeHandle,
-  useRef,
 } from 'react';
 import './App.scss';
 import {createFormGenerator, useFormState} from './pkgs';
@@ -113,8 +108,6 @@ function App() {
     // Console.log({event});
     return false;
   };
-
-  const el = createElement('div');
 
   return (
     <div className="App">

@@ -5,7 +5,7 @@ import {createFormSetState, createSetStateByKeys, FormSetState} from './utils';
 
 export const useFormState = <S = any>(initialData?: S) => {
   const [state, setState] = useState(initialData);
-  createFormSetState(setState as SetState<any>);
+  createFormSetState(setState as SetState<any>); // Мутирует
 
   return [state, setState] as [S, FormSetState<S & any>];
 };
