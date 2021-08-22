@@ -8,8 +8,8 @@ import {
 } from './types';
 import {defaultFormItemsByType, FormGeneratorItems} from './formItemsByType';
 import {objectGetValueByKeys, isFunction, isUndefined} from '../../utils';
-import {ExpandSetState} from '../useFormState/types';
 import {RecordAny} from '../../types';
+import {FormSetState} from '../useFormState/utils';
 
 export type FormGeneratorData = undefined | RecordAny;
 
@@ -19,7 +19,7 @@ type useFormGeneratorProps<SchemeProps extends ISchemeItemProps> = {
   formData?: FormGeneratorData;
   scheme: UsualScheme;
   propsAllFormItems?: RecordStringAny;
-  setFormData: ExpandSetState<FormGeneratorData>;
+  setFormData: FormSetState<any>;
   initialFormData?: FormGeneratorData;
 };
 

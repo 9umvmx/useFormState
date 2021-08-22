@@ -110,7 +110,7 @@ function App() {
   // }, 100);
   }, []);
 
-  console.log({state});
+  // Console.log({state});
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

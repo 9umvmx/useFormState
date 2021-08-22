@@ -1,11 +1,11 @@
 import {useDebugValue, useState} from 'react';
-import {ExpandSetState} from './types';
+import {SetState} from '../../types';
 
-import {createFormSetState, createSetStateByKeys} from './utils';
+import {createFormSetState, createSetStateByKeys, FormSetState} from './utils';
 
-export const useFormState = <S>(initialData?: S) => {
-  const [state, setState] = useState(initialData) as [S, ExpandSetState<S>];
-  createFormSetState(setState);
+export const useFormState = <S = any>(initialData?: S) => {
+  const [state, setState] = useState(initialData);
+  createFormSetState(setState as SetState<any>);
 
-  return [state, setState] as const;
+  return [state, setState] as [S, FormSetState<S & any>];
 };

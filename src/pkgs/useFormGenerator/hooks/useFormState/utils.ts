@@ -21,7 +21,7 @@ export const createFormSetState // CreateFormSetState
   };
 
 type SetStateAny = SetState<any>;
-type FormSetState<S extends SetStateAny> = S & { // S & { extend
+export type FormSetState<S extends SetStateAny> = S & { // S & { extend
   byKeys: (keys: string[]) => SetStateAny;
 }
 
