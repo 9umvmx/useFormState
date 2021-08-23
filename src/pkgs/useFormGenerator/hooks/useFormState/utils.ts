@@ -44,7 +44,7 @@ const createDispatchSetStateByKeys // CreateDispatchSetStateByKeys
     setState: SetStateAny,
     keys: string[],
   ) => {
-    return (newValue: any): void => // Create Dispatch SetState
+    return (newValue: any): void =>
       setState((preState: any) => { // Dispatch SetState
         // CheckValid
         if (isUndefined(preState) || isNull(preState)) {
@@ -81,7 +81,7 @@ export const createSetStateByIndex // CreateSetStateByIndex
   };
 
 const createDispatchSetStateByIndex = (setState: SetStateAny, index: number) => {
-  return (newValue: any): void => // Create Dispatch SetState
+  return (newValue: any): void =>
     setState((prevState: any) => { // Dispatch SetState
       // CheckValid
       if (isUndefined(prevState) || isNull(prevState)) {
