@@ -76,7 +76,7 @@ export const createSetStateByIndex // CreateSetStateByIndex
     return (index: number) => {
       const setStateByIndex = createNewSetStateByIndex(setState, index);
 
-      return setStateByIndex;
+      return createFormSetState(setStateByIndex);
     };
   };
 

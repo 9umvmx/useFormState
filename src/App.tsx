@@ -96,10 +96,14 @@ function App() {
   });
 
   useEffect(() => {
-    const setStateB = setState.byKeys(['b']);
-    setStateB(['vas', 3, 'pet']);
+    const setStateB = setState.byKeys(['zzzzz']);
+    setStateB(['value', 'data', null]);
+    const setStateSecondItem = setStateB.byIndx(2);
+    const nestedSetState = setStateSecondItem.byKeys(['a', 'b', 'c']);
 
-    setStateB.byIndx(1)(10);
+    nestedSetState([null]);
+    nestedSetState((prev) => ['working', ...prev]);
+    nestedSetState.byIndx(0)(prev => `${prev}!`);
   }, []);
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -113,7 +117,6 @@ function App() {
     <div className="App">
       <h2>Представление формы</h2>
       <form
-        onInvalid={console.log}
         onSubmit={handleSubmit}
       >{(
           <>

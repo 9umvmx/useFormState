@@ -1,6 +1,6 @@
 import {isFunction} from '../../utils';
 
-import {createSetStateByIndex, createSetStateByKeys} from './utils';
+import {createFormSetState, createSetStateByIndex, createSetStateByKeys} from './utils';
 
 const createMockSetState = (initialState?: any) => {
   const refState = {current: initialState};
@@ -58,9 +58,9 @@ describe('useRecordState', () => {
     test('simpleTest', () => {
       const [getState, setState] = createMockSetState(['vasya', 2, 'petya']);
 
-      setState.byIndex = createSetStateByIndex(setState);
+      setState.byIndx = createSetStateByIndex(setState);
 
-      const setStateSecondItem = setState.byIndex(1);
+      const setStateSecondItem = setState.byIndx(1);
       setStateSecondItem(10);
 
       expect(getState()).toStrictEqual(['vasya', 10, 'petya']);
@@ -68,12 +68,44 @@ describe('useRecordState', () => {
     test('prevValue test', () => {
       const [getState, setState] = createMockSetState(['vasya', 2, 'petya']);
 
-      setState.byIndex = createSetStateByIndex(setState);
+      setState.byIndx = createSetStateByIndex(setState);
 
-      const setStateSecondItem = setState.byIndex(1);
+      const setStateSecondItem = setState.byIndx(1);
       setStateSecondItem((prev) => prev - 3);
 
       expect(getState()).toStrictEqual(['vasya', -1, 'petya']);
+    });
+    test('zeroIndexTest', () => {
+      const [getState, setState] = createMockSetState([2, 'vasya', 'petya']);
+
+      setState.byIndx = createSetStateByIndex(setState);
+
+      const setStateSecondItem = setState.byIndx(0);
+      setStateSecondItem(10);
+
+      expect(getState()).toStrictEqual([10, 'vasya', 'petya']);
+    });
+  });
+
+  describe(createFormSetState.name, () => {
+    test('multiTest', () => {
+      const [getState, setState] = createMockSetState(['value', 'data', null]);
+
+      createFormSetState(setState); // Мутирует
+
+      const setStateSecondItem = setState.byIndx(2);
+      const nestedSetState = setStateSecondItem.byKeys(['a', 'b', 'c']);
+
+      nestedSetState([null, null, null]);
+      nestedSetState.byIndx(0)('working');
+
+      expect(getState()).toStrictEqual([
+        'value',
+        'data',
+        {
+          a: {b: {c: ['working', null, null]}},
+        },
+      ]);
     });
   });
 });
