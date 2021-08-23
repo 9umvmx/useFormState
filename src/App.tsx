@@ -96,9 +96,9 @@ function App() {
   });
 
   useEffect(() => {
-    const setStateB = setState.byKeys(['zzzzz']);
-    setStateB(['value', null, 'data']);
-    const setStateSecondItem = setStateB.byIndx(1);
+    const setStateZzzz = setState.byKeys(['zzzzz']);
+    setStateZzzz(['value', null, 'data']);
+    const setStateSecondItem = setStateZzzz.byIndx(1);
     const nestedSetState = setStateSecondItem.byKeys(['a', 'b', 'c']);
 
     nestedSetState([null]);
