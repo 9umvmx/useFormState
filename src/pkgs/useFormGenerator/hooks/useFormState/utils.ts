@@ -33,13 +33,13 @@ export type FormSetState<S extends SetStateAny> = S & { // S & { extend
 export const createSetStateByKeys // CreateSetStateByKeys
   = (setState: SetStateAny) => {
     return (keys: string[]) => {
-      const nestedSetState = createNewSetStateByKeys(setState, keys);
+      const nestedSetState = createDispatchSetStateByKeys(setState, keys);
 
       return createFormSetState(nestedSetState);
     };
   };
 
-const createNewSetStateByKeys // CreateNewSetStateByKeys
+const createDispatchSetStateByKeys // CreateDispatchSetStateByKeys
   = ( // Variables
     setState: SetStateAny,
     keys: string[],
@@ -74,13 +74,13 @@ const createNewSetStateByKeys // CreateNewSetStateByKeys
 export const createSetStateByIndex // CreateSetStateByIndex
   = (setState: SetStateAny) => {
     return (index: number) => {
-      const setStateByIndex = createNewSetStateByIndex(setState, index);
+      const setStateByIndex = createDispatchSetStateByIndex(setState, index);
 
       return createFormSetState(setStateByIndex);
     };
   };
 
-const createNewSetStateByIndex = (setState: SetStateAny, index: number) => {
+const createDispatchSetStateByIndex = (setState: SetStateAny, index: number) => {
   return (newValue: any): void => // Create Dispatch SetState
     setState((prevState: any) => { // Dispatch SetState
       // CheckValid
